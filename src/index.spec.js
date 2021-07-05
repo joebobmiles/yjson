@@ -53,4 +53,15 @@ describe("yjson", () =>
     expect(objectA.test).toStrictEqual({ "hello": "world" })
     expect(objectB.test).toStrictEqual({ "hello": "world" });
   });
+
+  it("Creates stores that share nested objects.", () =>
+  {
+    const objectA = yjson(doc1);
+    const objectB = yjson(doc2);
+
+    objectA.test = { foo: { bar: 'baz' } };
+
+    expect(objectA.test).toStrictEqual({ foo: { bar: 'baz' } });
+    expect(objectB.test).toStrictEqual({ foo: { bar: 'baz' } });
+  });
 });
