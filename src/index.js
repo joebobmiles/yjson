@@ -16,11 +16,11 @@ const createYMapFromObject = (object) =>
   return ymap;
 };
 
-const createObjectFromYMap = (map) =>
+const createObjectFromYMap = (ymap) =>
 {
   const object = {};
 
-  for (const [ key, value ] of map)
+  for (const [ key, value ] of ymap)
   {
     if (value instanceof Y.Map)
       object[key] = createObjectFromYMap(value)
@@ -29,7 +29,8 @@ const createObjectFromYMap = (map) =>
       object[key] = value;
   }
 
-  return createObjectProxyForMap(map, object);
+  return createObjectProxyForMap(ymap, object);
+};
 };
 
 const createArrayFromYArray = (yarray) =>
