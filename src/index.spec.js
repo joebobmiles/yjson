@@ -1,3 +1,4 @@
+const { expect } = require("@jest/globals");
 const Y = require("yjs");
 const { yjson } = require(".");
 
@@ -63,5 +64,10 @@ describe("yjson", () =>
 
     expect(objectA.test).toStrictEqual({ foo: { bar: 'baz' } });
     expect(objectB.test).toStrictEqual({ foo: { bar: 'baz' } });
+
+    objectA.test.foo.bar = 3;
+
+    expect(objectA.test.foo.bar).toEqual(3);
+    expect(objectB.test.foo.bar).toEqual(3);
   });
 });
