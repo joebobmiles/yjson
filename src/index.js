@@ -16,20 +16,74 @@ const createMapFromObject = (object) =>
   return ymap;
 };
 
-const createObjectFromMap = (map) =>
+const createObjectFromYMap = (map) =>
 {
   const object = {};
 
   for (const [ key, value ] of map)
   {
     if (value instanceof Y.Map)
-      object[key] = createObjectFromMap(value)
+      object[key] = createObjectFromYMap(value)
 
     else
       object[key] = value;
   }
 
   return createObjectProxyForMap(map, object);
+};
+
+const createArrayFromYArray = (array) =>
+{
+  return new Proxy(
+    array.toJSON(),
+    {
+      get: (object, property, receiver) =>
+      {
+        if (Object.keys(object).includes(property))
+        {
+          const value = array.get(parseInt(property.toString(), 10));
+
+          if (value instanceof Y.Array)
+            return createArrayFromYArray(value);
+
+          else if (value instanceof Y.Map)
+            return createObjectFromYMap(value);
+
+          else
+            return value;
+        }
+        else
+          return Reflect.get(object, property, receiver)
+      },
+      set: (object, property, value, receiver) =>
+      {
+        if (Object.keys(object).includes(property))
+        {
+          object[property] = value;
+
+          const index = parseInt(property, 10);
+
+          const left = array.slice(0, index);
+          const right = array.slice(index+1);
+          
+          array.delete(0, array.length);
+
+          if (value instanceof Array)
+            array.insert(0,[ ...left, Y.Array.from(value), ...right ]);
+
+          else if (value instanceof Object)
+            array.insert(0, [ ...left, createMapFromObject(value), ...right ]);
+
+          else
+            array.insert(0, [ ...left, value, ...right ]);
+        }
+        else
+          Reflect.set(object, property, value, receiver)
+
+        return true;
+      }
+    }
+  )
 };
 
 const createObjectProxyForMap = (map, object = {}) =>
@@ -51,36 +105,29 @@ const createObjectProxyForMap = (map, object = {}) =>
         const value = map.get(property)
 
         if (value instanceof Y.Array)
-        {
-          return value.toJSON();
-        }
+          return createArrayFromYArray(value);
+
         else if (value instanceof Y.Map)
-        {
-          return createObjectFromMap(value);
-        }
-        else {
+          return createObjectFromYMap(value);
+
+        else
           return value;
-        }
       },
       set: (object, property, value) =>
       {
         object[property] = value;
 
         if (value instanceof Array)
-        {
-          const yvalue = Y.Array.from(value);
-          map.set(property, yvalue);
-        }
+          map.set(property, Y.Array.from(value));
+
         else if (value instanceof Object)
-        {
           map.set(property, createMapFromObject(value));
-        }
-        else {
+
+        else
           map.set(property, value);
-        }
 
         return true;
-      }
+      },
     }
   );
 };
