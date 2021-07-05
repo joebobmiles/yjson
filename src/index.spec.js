@@ -1,5 +1,3 @@
-const { expect } = require("@jest/globals");
-const { object } = require("lib0");
 const Y = require("yjs");
 const yjson = require(".").default;
 
