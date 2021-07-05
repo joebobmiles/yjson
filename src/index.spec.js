@@ -1,4 +1,3 @@
-const { expect, it } = require("@jest/globals");
 const Y = require("yjs");
 const { yjson } = require(".");
 

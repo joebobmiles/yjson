@@ -32,6 +32,10 @@ const yjson = (doc) =>
         else if (value instanceof Object)
         {
           const yvalue = new Y.Map();
+
+          for (let p in value)
+            yvalue.set(p, value[p]);
+
           storage.set(property, yvalue);
         }
         else {
