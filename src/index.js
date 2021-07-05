@@ -2,15 +2,15 @@ const Y = require("yjs");
 
 const yjson = (doc) =>
 {
-  const __storageA = doc.getMap('storage');
-  const __storeA = __storageA.toJSON();
+  const storage = doc.getMap('storage');
+  const store = storage.toJSON();
 
   return new Proxy(
-    __storeA,
+    store,
     {
       get: (object, property) =>
       {
-        const value = __storageA.get(property)
+        const value = storage.get(property)
 
         if (value instanceof Y.Array || value instanceof Y.Map)
         {
@@ -27,15 +27,15 @@ const yjson = (doc) =>
         if (value instanceof Array)
         {
           const yvalue = Y.Array.from(value);
-          __storageA.set(property, yvalue);
+          storage.set(property, yvalue);
         }
         else if (value instanceof Object)
         {
           const yvalue = new Y.Map();
-          __storageA.set(property, yvalue);
+          storage.set(property, yvalue);
         }
         else {
-          __storageA.set(property, value);
+          storage.set(property, value);
         }
 
         return true;
