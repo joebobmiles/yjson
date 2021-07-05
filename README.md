@@ -2,8 +2,8 @@
 
 [Yjs](https://github.com/yjs/yjs) is a brilliant JavaScript library for using
 [Conflict-Free Replicated Data Types (CRDTs)](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type)
-in the browser. *YJSON* wraps that library to make using Yjs as simple as simple
-as working with Plain Data Objects.
+in the browser. *YJSON* wraps that library to make using Yjs as simple as
+working with Plain Data Objects.
 
 ## Why?
 
