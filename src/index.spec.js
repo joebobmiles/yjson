@@ -51,8 +51,13 @@ describe("yjson", () =>
 
     objectA.test = { "hello": "world" };
 
-    expect(objectA.test).toEqual({ "hello": "world" })
+    expect(objectA.test).toEqual({ "hello": "world" });
     expect(objectB.test).toEqual({ "hello": "world" });
+
+    objectA.test.hello = "samwise";
+
+    expect(objectA.test).toEqual({ "hello": "samwise" });
+    expect(objectB.test).toEqual({ "hello": "samwise" });
   });
 
   it("Creates stores that share nested objects.", () =>
