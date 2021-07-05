@@ -1,13 +1,13 @@
 const Y = require("yjs");
 
-const createMapFromObject = (object) =>
+const createYMapFromObject = (object) =>
 {
   const ymap = new Y.Map();
 
   for (let property in object)
   {
     if (object[property] instanceof Object)
-      ymap.set(property, createMapFromObject(object[property]));
+      ymap.set(property, createYMapFromObject(object[property]));
 
     else
       ymap.set(property, object[property]);
@@ -72,7 +72,7 @@ const createArrayFromYArray = (array) =>
             array.insert(0,[ ...left, Y.Array.from(value), ...right ]);
 
           else if (value instanceof Object)
-            array.insert(0, [ ...left, createMapFromObject(value), ...right ]);
+            array.insert(0, [ ...left, createYMapFromObject(value), ...right ]);
 
           else
             array.insert(0, [ ...left, value, ...right ]);
@@ -91,7 +91,7 @@ const createObjectProxyForMap = (map, object = {}) =>
   Object.entries(object).forEach(([ property, value ]) =>
   {
     if (value instanceof Object)
-      map.set(property, createMapFromObject(value));
+      map.set(property, createYMapFromObject(value));
 
     else
       map.set(property, value)
@@ -121,7 +121,7 @@ const createObjectProxyForMap = (map, object = {}) =>
           map.set(property, Y.Array.from(value));
 
         else if (value instanceof Object)
-          map.set(property, createMapFromObject(value));
+          map.set(property, createYMapFromObject(value));
 
         else
           map.set(property, value);
