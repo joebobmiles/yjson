@@ -50,6 +50,22 @@ describe("yjson", () =>
     expect(objectB.test).toEqual([ "goodbye", "world" ]);
   });
 
+  it("Creates stores that share nested arrays.", () =>
+  {
+    const objectA = yjson(doc1);
+    const objectB = yjson(doc2);
+
+    objectA.test = [ "hello", [ "world", "universe" ] ];
+
+    expect(objectA.test).toEqual([ "hello", [ "world", "universe" ] ]);
+    expect(objectB.test).toEqual([ "hello", [ "world", "universe" ] ]);
+
+    objectA.test[0][1] = "cosmos";
+
+    expect(objectA.test).toEqual([ "hello", [ "world", "cosmos" ] ]);
+    expect(objectB.test).toEqual([ "hello", [ "world", "cosmos" ] ]);
+  });
+
   it("Creates stores that share objects.", () =>
   {
     const objectA = yjson(doc1);
