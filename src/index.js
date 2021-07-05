@@ -32,16 +32,16 @@ const createObjectFromYMap = (map) =>
   return createObjectProxyForMap(map, object);
 };
 
-const createArrayFromYArray = (array) =>
+const createArrayFromYArray = (yarray) =>
 {
   return new Proxy(
-    array.toJSON(),
+    yarray.toJSON(),
     {
       get: (object, property, receiver) =>
       {
         if (Object.keys(object).includes(property))
         {
-          const value = array.get(parseInt(property.toString(), 10));
+          const value = yarray.get(parseInt(property.toString(), 10));
 
           if (value instanceof Y.Array)
             return createArrayFromYArray(value);
@@ -63,19 +63,19 @@ const createArrayFromYArray = (array) =>
 
           const index = parseInt(property, 10);
 
-          const left = array.slice(0, index);
-          const right = array.slice(index+1);
+          const left = yarray.slice(0, index);
+          const right = yarray.slice(index+1);
           
-          array.delete(0, array.length);
+          yarray.delete(0, yarray.length);
 
           if (value instanceof Array)
-            array.insert(0,[ ...left, Y.Array.from(value), ...right ]);
+            yarray.insert(0,[ ...left, Y.Array.from(value), ...right ]);
 
           else if (value instanceof Object)
-            array.insert(0, [ ...left, createYMapFromObject(value), ...right ]);
+            yarray.insert(0, [ ...left, createYMapFromObject(value), ...right ]);
 
           else
-            array.insert(0, [ ...left, value, ...right ]);
+            yarray.insert(0, [ ...left, value, ...right ]);
         }
         else
           Reflect.set(object, property, value, receiver)
