@@ -40,8 +40,8 @@ describe("yjson", () =>
 
     objectA.test = [ "hello", "world" ];
 
-    expect(objectA.test).toStrictEqual([ "hello", "world" ]);
-    expect(objectB.test).toStrictEqual([ "hello", "world" ]);
+    expect(objectA.test).toEqual([ "hello", "world" ]);
+    expect(objectB.test).toEqual([ "hello", "world" ]);
   });
 
   it("Creates stores that share objects.", () =>
@@ -51,8 +51,8 @@ describe("yjson", () =>
 
     objectA.test = { "hello": "world" };
 
-    expect(objectA.test).toStrictEqual({ "hello": "world" })
-    expect(objectB.test).toStrictEqual({ "hello": "world" });
+    expect(objectA.test).toEqual({ "hello": "world" })
+    expect(objectB.test).toEqual({ "hello": "world" });
   });
 
   it("Creates stores that share nested objects.", () =>
@@ -62,8 +62,8 @@ describe("yjson", () =>
 
     objectA.test = { foo: { bar: 'baz' } };
 
-    expect(objectA.test).toStrictEqual({ foo: { bar: 'baz' } });
-    expect(objectB.test).toStrictEqual({ foo: { bar: 'baz' } });
+    expect(objectA.test).toEqual({ foo: { bar: 'baz' } });
+    expect(objectB.test).toEqual({ foo: { bar: 'baz' } });
 
     objectA.test.foo.bar = 3;
 

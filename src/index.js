@@ -16,6 +16,59 @@ const createMapFromObject = (object) =>
   return ymap;
 };
 
+const createObjectProxyForMap = (map, object = {}) =>
+{
+  Object.entries(object).forEach(([ property, value ]) =>
+  {
+    if (value instanceof Object)
+      map.set(property, createMapFromObject(value));
+
+    else
+      map.set(property, value)
+  });
+
+  return new Proxy(
+    object,
+    {
+      get: (_, property) =>
+      {
+        const value = map.get(property)
+
+        if (value instanceof Y.Array)
+        {
+          return value.toJSON();
+        }
+        else if (value instanceof Y.Map)
+        {
+          return createObjectFromMap(value);
+        }
+        else {
+          return value;
+        }
+      },
+      set: (object, property, value) =>
+      {
+        object[property] = value;
+
+        if (value instanceof Array)
+        {
+          const yvalue = Y.Array.from(value);
+          map.set(property, yvalue);
+        }
+        else if (value instanceof Object)
+        {
+          map.set(property, createMapFromObject(value));
+        }
+        else {
+          map.set(property, value);
+        }
+
+        return true;
+      }
+    }
+  );
+};
+
 const createObjectFromMap = (map) =>
 {
   const object = {};
@@ -23,13 +76,13 @@ const createObjectFromMap = (map) =>
   for (const [ key, value ] of map)
   {
     if (value instanceof Y.Map)
-      object[key] = createObjectFromMap(value);
+      object[key] = createObjectFromMap(value)
 
     else
       object[key] = value;
   }
 
-  return object;
+  return createObjectProxyForMap(map, object);
 };
 
 const yjson = (doc) =>
