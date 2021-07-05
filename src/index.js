@@ -1,5 +1,21 @@
 const Y = require("yjs");
 
+const createMapFromObject = (object) =>
+{
+  const ymap = new Y.Map();
+
+  for (let property in object)
+  {
+    if (object[property] instanceof Object)
+      ymap.set(property, createMapFromObject(object[property]));
+
+    else
+      ymap.set(property, object[property]);
+  }
+
+  return ymap;
+};
+
 const yjson = (doc) =>
 {
   const storage = doc.getMap('storage');
@@ -31,12 +47,7 @@ const yjson = (doc) =>
         }
         else if (value instanceof Object)
         {
-          const yvalue = new Y.Map();
-
-          for (let p in value)
-            yvalue.set(p, value[p]);
-
-          storage.set(property, yvalue);
+          storage.set(property, createMapFromObject(value));
         }
         else {
           storage.set(property, value);
