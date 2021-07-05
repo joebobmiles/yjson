@@ -58,7 +58,7 @@ describe("yjson", () =>
     expect(objectA.test).toEqual([ "hello", [ "world", "universe" ] ]);
     expect(objectB.test).toEqual([ "hello", [ "world", "universe" ] ]);
 
-    objectA.test[0][1] = "cosmos";
+    objectA.test[1][1] = "cosmos";
 
     expect(objectA.test).toEqual([ "hello", [ "world", "cosmos" ] ]);
     expect(objectB.test).toEqual([ "hello", [ "world", "cosmos" ] ]);
