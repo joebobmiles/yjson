@@ -1,4 +1,5 @@
 const { expect } = require("@jest/globals");
+const { object } = require("lib0");
 const Y = require("yjs");
 const { yjson } = require(".");
 
@@ -42,6 +43,11 @@ describe("yjson", () =>
 
     expect(objectA.test).toEqual([ "hello", "world" ]);
     expect(objectB.test).toEqual([ "hello", "world" ]);
+
+    objectA.test[0] = "goodbye";
+
+    expect(objectA.test).toEqual([ "goodbye", "world" ]);
+    expect(objectB.test).toEqual([ "goodbye", "world" ]);
   });
 
   it("Creates stores that share objects.", () =>
