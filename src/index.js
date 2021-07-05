@@ -153,4 +153,5 @@ const yjson = (doc) => createObjectProxyForMap(doc.getMap('storage'));
 module.exports =
 {
   yjson,
+  default: yjson,
 };
