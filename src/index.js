@@ -6,7 +6,10 @@ const createYMapFromObject = (object) =>
 
   for (let property in object)
   {
-    if (object[property] instanceof Object)
+    if (object[property] instanceof Array)
+      ymap.set(property, createYArrayFromArray(object[property]));
+
+    else if (object[property] instanceof Object)
       ymap.set(property, createYMapFromObject(object[property]));
 
     else
@@ -22,7 +25,10 @@ const createObjectFromYMap = (ymap) =>
 
   for (const [ key, value ] of ymap)
   {
-    if (value instanceof Y.Map)
+    if (value instanceof Y.Array)
+      object[key] = createArrayFromYArray(value);
+
+    else if (value instanceof Y.Map)
       object[key] = createObjectFromYMap(value)
 
     else
@@ -106,7 +112,10 @@ const createObjectProxyForMap = (map, object = {}) =>
 {
   Object.entries(object).forEach(([ property, value ]) =>
   {
-    if (value instanceof Object)
+    if (value instanceof Array)
+      map.set(property, createYArrayFromArray(value));
+
+    else if (value instanceof Object)
       map.set(property, createYMapFromObject(value));
 
     else
