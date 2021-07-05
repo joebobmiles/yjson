@@ -16,6 +16,22 @@ const createMapFromObject = (object) =>
   return ymap;
 };
 
+const createObjectFromMap = (map) =>
+{
+  const object = {};
+
+  for (const [ key, value ] of map)
+  {
+    if (value instanceof Y.Map)
+      object[key] = createObjectFromMap(value);
+
+    else
+      object[key] = value;
+  }
+
+  return object;
+};
+
 const yjson = (doc) =>
 {
   const storage = doc.getMap('storage');
@@ -28,9 +44,13 @@ const yjson = (doc) =>
       {
         const value = storage.get(property)
 
-        if (value instanceof Y.Array || value instanceof Y.Map)
+        if (value instanceof Y.Array)
         {
           return value.toJSON();
+        }
+        else if (value instanceof Y.Map)
+        {
+          return createObjectFromMap(value);
         }
         else {
           return value;
