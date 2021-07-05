@@ -47,6 +47,9 @@ const createYArrayFromArray = (array) =>
     if (array[index] instanceof Array)
       yarray.push([ createYArrayFromArray(array[index]) ]);
 
+    else if (array[index] instanceof Object)
+      yarray.push([ createYMapFromObject(array[index]) ]);
+
     else
       yarray.push([ array[index] ]);
   }
