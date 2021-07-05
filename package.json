@@ -1,15 +1,15 @@
 {
-  "name": "yjs-json-proxy",
+  "name": "yjson",
   "version": "1.0.0",
-  "description": "",
+  "description": "Yjs backed Plain Data Objects.",
   "main": "index.js",
   "scripts": {
     "develop": "nodemon src/index.js",
     "test": "jest"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Joseph R Miles <joe@jrm.dev> (https://jrm.dev)",
+  "license": "MIT",
   "dependencies": {
     "yjs": "^13.5.11"
   },
