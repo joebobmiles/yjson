@@ -31,6 +31,21 @@ const createObjectFromYMap = (ymap) =>
 
   return createObjectProxyForMap(ymap, object);
 };
+
+const createYArrayFromArray = (array) =>
+{
+  const yarray = new Y.Array();
+
+  for (let index in array)
+  {
+    if (array[index] instanceof Array)
+      yarray.push([ createYArrayFromArray(array[index]) ]);
+
+    else
+      yarray.push([ array[index] ]);
+  }
+
+  return yarray;
 };
 
 const createArrayFromYArray = (yarray) =>
@@ -70,7 +85,7 @@ const createArrayFromYArray = (yarray) =>
           yarray.delete(0, yarray.length);
 
           if (value instanceof Array)
-            yarray.insert(0,[ ...left, Y.Array.from(value), ...right ]);
+            yarray.insert(0,[ ...left, createYArrayFromArray(value), ...right ]);
 
           else if (value instanceof Object)
             yarray.insert(0, [ ...left, createYMapFromObject(value), ...right ]);
@@ -119,7 +134,7 @@ const createObjectProxyForMap = (map, object = {}) =>
         object[property] = value;
 
         if (value instanceof Array)
-          map.set(property, Y.Array.from(value));
+          map.set(property, createYArrayFromArray(value));
 
         else if (value instanceof Object)
           map.set(property, createYMapFromObject(value));
