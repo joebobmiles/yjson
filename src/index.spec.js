@@ -30,8 +30,8 @@ describe("yjson", () =>
 
       objectA.test = 3;
 
-      expect(objectA.test).toEqual(3);
-      expect(objectB.test).toEqual(3);
+      expect(objectA).toEqual({ test: 3 });
+      expect(objectB).toEqual({ test: 3 });
     });
 
     it("Creates stores that share arrays.", () =>
@@ -41,13 +41,13 @@ describe("yjson", () =>
 
       objectA.test = [ "hello", "world" ];
 
-      expect(objectA.test).toEqual([ "hello", "world" ]);
-      expect(objectB.test).toEqual([ "hello", "world" ]);
+      expect(objectA).toEqual({ test: [ "hello", "world" ] });
+      expect(objectB).toEqual({ test: [ "hello", "world" ] });
 
       objectA.test[0] = "goodbye";
 
-      expect(objectA.test).toEqual([ "goodbye", "world" ]);
-      expect(objectB.test).toEqual([ "goodbye", "world" ]);
+      expect(objectA).toEqual({ test: [ "goodbye", "world" ] });
+      expect(objectB).toEqual({ test: [ "goodbye", "world" ] });
     });
 
     it("Creates stores that share nested arrays.", () =>
@@ -57,13 +57,13 @@ describe("yjson", () =>
 
       objectA.test = [ "hello", [ "world", "universe" ] ];
 
-      expect(objectA.test).toEqual([ "hello", [ "world", "universe" ] ]);
-      expect(objectB.test).toEqual([ "hello", [ "world", "universe" ] ]);
+      expect(objectA).toEqual({ test: [ "hello", [ "world", "universe" ] ] });
+      expect(objectB).toEqual({ test: [ "hello", [ "world", "universe" ] ] });
 
       objectA.test[1][1] = "cosmos";
 
-      expect(objectA.test).toEqual([ "hello", [ "world", "cosmos" ] ]);
-      expect(objectB.test).toEqual([ "hello", [ "world", "cosmos" ] ]);
+      expect(objectA).toEqual({ test: [ "hello", [ "world", "cosmos" ] ] });
+      expect(objectB).toEqual({ test: [ "hello", [ "world", "cosmos" ] ] });
     });
 
     it("Creates stores that share objects nested in arrays.", () =>
@@ -73,13 +73,13 @@ describe("yjson", () =>
 
       objectA.test = [ { foo: 1 }, { bar: 2 } ];
 
-      expect(objectA.test).toEqual([ { foo: 1 }, { bar: 2 } ]);
-      expect(objectB.test).toEqual([ { foo: 1 }, { bar: 2 } ]);
+      expect(objectA).toEqual({ test: [ { foo: 1 }, { bar: 2 } ] });
+      expect(objectB).toEqual({ test: [ { foo: 1 }, { bar: 2 } ] });
 
       objectA.test[0].foo = 3;
 
-      expect(objectA.test[0].foo).toEqual(3);
-      expect(objectB.test[0].foo).toEqual(3);
+      expect(objectA).toEqual({ test: [ { foo: 3 }, { bar: 2 } ] });
+      expect(objectB).toEqual({ test: [ { foo: 3 }, { bar: 2 } ] });
     });
 
     it("Creates stores that share objects.", () =>
@@ -89,13 +89,13 @@ describe("yjson", () =>
 
       objectA.test = { "hello": "world" };
 
-      expect(objectA.test).toEqual({ "hello": "world" });
-      expect(objectB.test).toEqual({ "hello": "world" });
+      expect(objectA).toEqual({ test: { "hello": "world" } });
+      expect(objectB).toEqual({ test: { "hello": "world" } });
 
       objectA.test.hello = "samwise";
 
-      expect(objectA.test).toEqual({ "hello": "samwise" });
-      expect(objectB.test).toEqual({ "hello": "samwise" });
+      expect(objectA).toEqual({ test: { "hello": "samwise" } });
+      expect(objectB).toEqual({ test: { "hello": "samwise" } });
     });
 
     it("Creates stores that share nested objects.", () =>
@@ -105,13 +105,13 @@ describe("yjson", () =>
 
       objectA.test = { foo: { bar: 'baz' } };
 
-      expect(objectA.test).toEqual({ foo: { bar: 'baz' } });
-      expect(objectB.test).toEqual({ foo: { bar: 'baz' } });
+      expect(objectA).toEqual({ test: { foo: { bar: 'baz' } } });
+      expect(objectB).toEqual({ test: { foo: { bar: 'baz' } } });
 
       objectA.test.foo.bar = 3;
 
-      expect(objectA.test.foo.bar).toEqual(3);
-      expect(objectB.test.foo.bar).toEqual(3);
+      expect(objectA).toEqual({ test: { foo: { bar: 3 } } });
+      expect(objectB).toEqual({ test: { foo: { bar: 3 } } });
     });
 
     it("Creates stores that share arrays nested in objects.", () =>
@@ -121,12 +121,13 @@ describe("yjson", () =>
 
       objectA.test = { foo: [ 'bar', 'baz' ] };
 
-      expect(objectA.test).toEqual({ foo: [ 'bar', 'baz' ] });
-      expect(objectB.test).toEqual({ foo: [ 'bar', 'baz' ] });
+      expect(objectA).toEqual({ test: { foo: [ 'bar', 'baz' ] } });
+      expect(objectB).toEqual({ test: { foo: [ 'bar', 'baz' ] } });
 
       objectA.test.foo[0] = 3;
 
-      expect(objectA.test.foo[0]).toEqual(3);
-      expect(objectB.test.foo[0]).toEqual(3);
+      expect(objectA).toEqual({ test: { foo: [ 3, 'baz' ] } });
+      expect(objectB).toEqual({ test: { foo: [ 3, 'baz' ] } });
+    });
     });
   });

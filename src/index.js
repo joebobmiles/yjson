@@ -125,6 +125,27 @@ const createObjectProxyForMap = (map, object = {}) =>
       map.set(property, value)
   });
 
+  map.observe(({ target, changes }) =>
+  {
+    if (target === map)
+    {
+      changes.keys.forEach((change, key) =>
+      {
+        switch (change.action)
+        {
+          case 'add':
+          case 'update':
+            object[key] = map.get(key);
+            break;
+
+          case 'delete':
+            delete object[key];
+            break;
+        }
+      });
+    }
+  });
+
   return new Proxy(
     object,
     {
