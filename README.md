@@ -49,8 +49,8 @@ doc2.on("update", (update) =>
 });
 
 // Create a YJSON object from each document.
-const storeA = yjson(doc1);
-const storeB = yjson(doc2);
+const storeA = yjson(doc1, "shared");
+const storeB = yjson(doc2, "shared");
 
 // Add a key "foo" with value "bar" to storeA.
 storeA.foo = "bar";
