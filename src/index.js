@@ -185,10 +185,6 @@ const createObjectProxyForMap = (map, object = {}) =>
 const yjson = (doc, name = uuid()) =>
 {
   const store = createObjectProxyForMap(doc.getMap(name));
-
-  store.prototype.observe = (callback) =>
-    doc.getMap(name).observeDeep(callback);
-  
   return store;
 };
 
