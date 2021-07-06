@@ -70,3 +70,6 @@ console.log(storeB) // => { foo: "bar" }
     object a unique ID.
  3. Yjs Text shared types are not supported. In the future, any string you put
     in a YJSON object will be transformed into Yjs Text instances.
+ 4. YJSON objects currently provide no system for subscribing or observing
+    updates. This will be implemented in the future to allow for interaction
+    with functional reactive systems like React.
