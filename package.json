@@ -55,11 +55,11 @@
             "public": {
               "npmPublish": true
             },
-            "github": {
+            "scoped": {
               "npmPublish": true,
               "pkgRoot": "dist"
             },
-            "scoped": {
+            "github": {
               "npmPublish": true,
               "pkgRoot": "dist"
             }
