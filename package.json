@@ -3,11 +3,24 @@
   "version": "1.0.0",
   "description": "Yjs backed Plain Data Objects.",
   "main": "index.js",
+  "types": "index.d.ts",
+  "type": "commonjs",
   "scripts": {
     "develop": "nodemon src/index.js",
     "test": "jest"
   },
-  "keywords": [],
+  "keywords": [
+    "yjs",
+    "json",
+    "crdt",
+    "pdo",
+    "offline-first",
+    "peer-to-peer",
+    "p2p",
+    "distributed-storage",
+    "local-first",
+    "yjs-bindings"
+  ],
   "author": "Joseph R Miles <joe@jrm.dev> (https://jrm.dev)",
   "license": "MIT",
   "dependencies": {
@@ -15,7 +28,46 @@
     "yjs": "^13.5.11"
   },
   "devDependencies": {
+    "@amanda-mitchell/semantic-release-npm-multiple": "^2.8.0",
     "jest": "^27.0.6",
-    "nodemon": "^2.0.9"
+    "nodemon": "^2.0.9",
+    "semantic-release": "^17.4.4"
+  },
+  "release": {
+    "branches": [
+      "master"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      [
+        "@amanda-mitchell/semantic-release-npm-multiple",
+        {
+          "registries": {
+            "public": {
+              "npmPublish": true
+            },
+            "github": {
+              "npmPublish": true,
+              "pkgRoot": "dist"
+            },
+            "scoped": {
+              "npmPublish": true,
+              "pkgRoot": "dist"
+            }
+          }
+        }
+      ],
+      "@semantic-release/github",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json"
+          ],
+          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        }
+      ]
+    ]
   }
 }
