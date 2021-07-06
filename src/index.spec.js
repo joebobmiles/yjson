@@ -138,4 +138,21 @@ describe("yjson", () =>
     expect(objectA).toEqual({ test: { foo: [ 'bar', 'baz' ] } });
     expect(objectB).toEqual({});
   });
+
+  it("Does not populate a new store after the first has been modified.", () =>
+  {
+    const objectA = yjson(doc1, "storage");
+
+    objectA.test = 12;
+
+    const objectB = yjson(doc2, "storage");
+
+    expect(objectA).toEqual({ test: 12 });
+    expect(objectB).toEqual({});
+
+    objectA.test = "foo";
+
+    expect(objectA).toEqual({ test: "foo" });
+    expect(objectB).toEqual({ test: "foo" });
+  });
 });
