@@ -1,0 +1,69 @@
+name: Test & Release
+on:
+  push: [ master ]
+
+jobs:
+  commitlint:
+    name: Run commitlint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - use: actions/setup-node@v2
+        with:
+          node-version: 15
+
+      - run: npx commitlint
+
+  test:
+    name: Run test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 15
+
+      - run: npm ci
+
+      - run: npm test
+  
+  release:
+    name: Release new version
+    runs-on: ubuntu-latest
+
+    # Don't perform release if tests fail.
+    needs: test
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 15
+
+      # Create a dist/ directory that contains everything from the 
+      - run: |
+        cp -r . dist/
+        cd dist/
+
+      # Replace the first occurrence of 'yjson' with '@joebobmiles/yjson' in
+      # package.json. This allows us to insert 'yjson' in places other than the
+      # package name without fearing that they will be edited.
+      - run: sed -i "0,/yjson/{s//@joebobmiles\/yjson/}" package.json
+
+      # Move out of the dist/ directory so that we can install deps and execute
+      # semantic-release to create a new release.
+      - run: cd ../
+
+      - run: npm ci
+      
+      - run: npx semantic-release --debug --dry-run
+
