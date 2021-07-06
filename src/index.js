@@ -1,4 +1,5 @@
 const Y = require("yjs");
+const { v4: uuid } = require("uuid");
 
 const createYMapFromObject = (object) =>
 {
@@ -181,7 +182,10 @@ const createObjectProxyForMap = (map, object = {}) =>
   );
 };
 
-const yjson = (doc) => createObjectProxyForMap(doc.getMap('storage'));
+const yjson = (doc, name = uuid()) =>
+{
+  return createObjectProxyForMap(doc.getMap(name));
+};
 
 module.exports =
 {

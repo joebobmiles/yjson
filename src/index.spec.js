@@ -25,8 +25,8 @@ describe("yjson", () =>
 
     it("Creates stores that share scalar values.", () =>
     {
-      const objectA = yjson(doc1);
-      const objectB = yjson(doc2);
+      const objectA = yjson(doc1, "storage");
+      const objectB = yjson(doc2, "storage");
 
       objectA.test = 3;
 
@@ -36,8 +36,8 @@ describe("yjson", () =>
 
     it("Creates stores that share arrays.", () =>
     {
-      const objectA = yjson(doc1);
-      const objectB = yjson(doc2);
+      const objectA = yjson(doc1, "storage");
+      const objectB = yjson(doc2, "storage");
 
       objectA.test = [ "hello", "world" ];
 
@@ -52,8 +52,8 @@ describe("yjson", () =>
 
     it("Creates stores that share nested arrays.", () =>
     {
-      const objectA = yjson(doc1);
-      const objectB = yjson(doc2);
+      const objectA = yjson(doc1, "storage");
+      const objectB = yjson(doc2, "storage");
 
       objectA.test = [ "hello", [ "world", "universe" ] ];
 
@@ -68,8 +68,8 @@ describe("yjson", () =>
 
     it("Creates stores that share objects nested in arrays.", () =>
     {
-      const objectA = yjson(doc1);
-      const objectB = yjson(doc2);
+      const objectA = yjson(doc1, "storage");
+      const objectB = yjson(doc2, "storage");
 
       objectA.test = [ { foo: 1 }, { bar: 2 } ];
 
@@ -84,8 +84,8 @@ describe("yjson", () =>
 
     it("Creates stores that share objects.", () =>
     {
-      const objectA = yjson(doc1);
-      const objectB = yjson(doc2);
+      const objectA = yjson(doc1, "storage");
+      const objectB = yjson(doc2, "storage");
 
       objectA.test = { "hello": "world" };
 
@@ -100,8 +100,8 @@ describe("yjson", () =>
 
     it("Creates stores that share nested objects.", () =>
     {
-      const objectA = yjson(doc1);
-      const objectB = yjson(doc2);
+      const objectA = yjson(doc1, "storage");
+      const objectB = yjson(doc2, "storage");
 
       objectA.test = { foo: { bar: 'baz' } };
 
@@ -116,8 +116,8 @@ describe("yjson", () =>
 
     it("Creates stores that share arrays nested in objects.", () =>
     {
-      const objectA = yjson(doc1);
-      const objectB = yjson(doc2);
+      const objectA = yjson(doc1, "storage");
+      const objectB = yjson(doc2, "storage");
 
       objectA.test = { foo: [ 'bar', 'baz' ] };
 
@@ -129,5 +129,16 @@ describe("yjson", () =>
       expect(objectA).toEqual({ test: { foo: [ 3, 'baz' ] } });
       expect(objectB).toEqual({ test: { foo: [ 3, 'baz' ] } });
     });
+
+    it("Creates stores that do not sync by default.", () =>
+    {
+      const objectA = yjson(doc1);
+      const objectB = yjson(doc2);
+
+      objectA.test = { foo: [ 'bar', 'baz' ] };
+
+      expect(objectA).toEqual({ test: { foo: [ 'bar', 'baz' ] } });
+      expect(objectB).toEqual({});
     });
   });
+});

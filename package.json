@@ -11,6 +11,7 @@
   "author": "Joseph R Miles <joe@jrm.dev> (https://jrm.dev)",
   "license": "MIT",
   "dependencies": {
+    "uuid": "^8.3.2",
     "yjs": "^13.5.11"
   },
   "devDependencies": {
