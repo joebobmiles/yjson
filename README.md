@@ -61,16 +61,9 @@ console.log(storeB) // => { foo: "bar" }
 
 ## Caveats
 
- 1. All YJSON objects sync together. What you do to one object, affects another
-    object. This will be fixed later by assigning each new object a unique ID.
-    Then only objects that have purposefully shared IDs will sync.
- 2. You cannot create more than one YJSON object per Yjs Document. Each call of
-    `yjson` creates a new empty object with the same ID as the last object,
-    overwriting that object. Again, this will be fixed by providing each new
-    object a unique ID.
- 3. Yjs Text shared types are not supported. In the future, any string you put
+ 1. Yjs Text shared types are not supported. In the future, any string you put
     in a YJSON object will be transformed into Yjs Text instances.
- 4. YJSON objects currently provide no system for subscribing or observing
+ 1. YJSON objects currently provide no system for subscribing or observing
     updates. This will be implemented in the future to allow for interaction
     with functional reactive systems like React.
 
