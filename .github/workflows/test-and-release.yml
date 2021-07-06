@@ -54,17 +54,13 @@ jobs:
 
       # Create a dist/ directory that contains everything from the 
       - run: |
-          cp -r . dist/
-          cd dist/
+          cp -r . /tmp/dist/
+          cp -r /tmp/dist dist/
 
       # Replace the first occurrence of 'yjson' with '@joebobmiles/yjson' in
       # package.json. This allows us to insert 'yjson' in places other than the
       # package name without fearing that they will be edited.
-      - run: sed -i "0,/yjson/{s//@joebobmiles\/yjson/}" package.json
-
-      # Move out of the dist/ directory so that we can install deps and execute
-      # semantic-release to create a new release.
-      - run: cd ../
+      - run: sed -i "0,/yjson/{s//@joebobmiles\/yjson/}" dist/package.json
 
       - run: npm ci
       
