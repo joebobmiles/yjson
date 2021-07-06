@@ -51,8 +51,8 @@ jobs:
 
       # Create a dist/ directory that contains everything from the 
       - run: |
-        cp -r . dist/
-        cd dist/
+          cp -r . dist/
+          cd dist/
 
       # Replace the first occurrence of 'yjson' with '@joebobmiles/yjson' in
       # package.json. This allows us to insert 'yjson' in places other than the
