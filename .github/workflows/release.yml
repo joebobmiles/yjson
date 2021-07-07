@@ -8,9 +8,6 @@ jobs:
     name: Release new version
     runs-on: ubuntu-latest
 
-    # Don't perform release if tests fail.
-    needs: test
-
     steps:
       - uses: actions/checkout@v2
         with:
