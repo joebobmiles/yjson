@@ -43,7 +43,8 @@
   },
   "release": {
     "branches": [
-      "master"
+      "master",
+      { "name": "staging", "channel": "next", "prerelease": true }
     ],
     "plugins": [
       "@semantic-release/commit-analyzer",
