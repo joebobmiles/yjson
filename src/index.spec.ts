@@ -1,21 +1,21 @@
-const Y = require("yjs");
-const yjson = require(".").default;
+import Y from "yjs";
+import yjson from ".";
 
 describe("yjson", () =>
 {
-  let doc1;
-  let doc2;
+  let doc1: Y.Doc;
+  let doc2: Y.Doc;
 
   beforeEach(() =>
   {
     doc1 = new Y.Doc();
     doc2 = new Y.Doc();
 
-    doc1.on("update", (update) =>
+    doc1.on("update", (update: any) =>
     {
       Y.applyUpdate(doc2, update);
     });
-    doc2.on("update", (update) =>
+    doc2.on("update", (update: any) =>
     {
       Y.applyUpdate(doc1, update);
     });
