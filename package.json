@@ -1,5 +1,6 @@
 {
   "name": "yjson",
+  "private": false,
   "version": "1.0.0",
   "description": "Yjs backed Plain Data Objects.",
   "main": "index.js",
@@ -78,5 +79,8 @@
         }
       ]
     ]
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
