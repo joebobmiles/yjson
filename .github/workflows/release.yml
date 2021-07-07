@@ -1,41 +1,9 @@
-name: Test & Release
+name: Release
 on:
   push:
     branches: [ master, staging ]
 
 jobs:
-  commitlint:
-    name: Run commitlint
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 15
-
-      - run: npm ci
-
-      - run: npx commitlint --from HEAD~1 --to HEAD --verbose
-
-  test:
-    name: Run test
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 15
-
-      - run: npm ci
-
-      - run: npm test
-  
   release:
     name: Release new version
     runs-on: ubuntu-latest
