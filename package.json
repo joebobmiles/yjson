@@ -1,6 +1,7 @@
 {
   "name": "yjson",
-  "version": "1.0.0",
+  "private": false,
+  "version": "1.0.0-staging.1",
   "description": "Yjs backed Plain Data Objects.",
   "main": "index.js",
   "types": "index.d.ts",
@@ -43,7 +44,12 @@
   },
   "release": {
     "branches": [
-      "master"
+      "master",
+      {
+        "name": "staging",
+        "channel": "next",
+        "prerelease": true
+      }
     ],
     "plugins": [
       "@semantic-release/commit-analyzer",
@@ -77,5 +83,8 @@
         }
       ]
     ]
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -1,47 +1,12 @@
-name: Test & Release
+name: Release
 on:
   push:
-    branches: [ master ]
+    branches: [ master, staging ]
 
 jobs:
-  commitlint:
-    name: Run commitlint
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 15
-
-      - run: npm ci
-
-      - run: npx commitlint --from HEAD~1 --to HEAD --verbose
-
-  test:
-    name: Run test
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 15
-
-      - run: npm ci
-
-      - run: npm test
-  
   release:
     name: Release new version
     runs-on: ubuntu-latest
-
-    # Don't perform release if tests fail.
-    needs: test
 
     steps:
       - uses: actions/checkout@v2
@@ -64,7 +29,7 @@ jobs:
 
       - run: npm ci
       
-      - run: npx semantic-release --debug --dry-run
+      - run: npx semantic-release --debug
         env:
           PUBLIC_NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           PUBLIC_NPM_CONFIG_REGISTRY: ${{ secrets.NPM_CONFIG_REGISTRY }}
