@@ -1,5 +1,9 @@
 name: Verify
-on: [ push, pull_request ]
+on: 
+  push:
+    branches-ignore: [ master, staging ]
+  pull_request:
+    branches-ignore: [ master, staging ]
 
 jobs:
   commitlint:
