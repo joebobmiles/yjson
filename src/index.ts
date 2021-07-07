@@ -1,9 +1,9 @@
-const Y = require("yjs");
-const { v4: uuid } = require("uuid");
+import Y from "yjs";
+import { v4 as uuid } from "uuid";
 
-const createYMapFromObject = (object) =>
+const createYMapFromObject = <T = any>(object: any): Y.Map<T> =>
 {
-  const ymap = new Y.Map();
+  const ymap = new Y.Map<T>();
 
   for (let property in object)
   {
@@ -20,28 +20,28 @@ const createYMapFromObject = (object) =>
   return ymap;
 };
 
-const createObjectFromYMap = (ymap) =>
+const createObjectFromYMap = <T = {}>(ymap: Y.Map<any>): T =>
 {
-  const object = {};
+  const object: T = {} as T;
 
   for (const [ key, value ] of ymap)
   {
     if (value instanceof Y.Array)
-      object[key] = createArrayFromYArray(value);
+      (object as any)[key] = createArrayFromYArray(value);
 
     else if (value instanceof Y.Map)
-      object[key] = createObjectFromYMap(value)
+      (object as any)[key] = createObjectFromYMap(value)
 
     else
-      object[key] = value;
+      (object as any)[key] = value;
   }
 
   return createObjectProxyForMap(ymap, object);
 };
 
-const createYArrayFromArray = (array) =>
+const createYArrayFromArray = <T = any>(array: T[]): Y.Array<T> =>
 {
-  const yarray = new Y.Array();
+  const yarray = new Y.Array<T>();
 
   for (let index in array)
   {
@@ -58,14 +58,14 @@ const createYArrayFromArray = (array) =>
   return yarray;
 };
 
-const createArrayFromYArray = (yarray) =>
+const createArrayFromYArray = <T = any>(yarray: Y.Array<T>): T[] =>
 {
   return new Proxy(
     yarray.toJSON(),
     {
       get: (object, property, receiver) =>
       {
-        if (Object.keys(object).includes(property))
+        if (Object.keys(object).includes(property as string))
         {
           const value = yarray.get(parseInt(property.toString(), 10));
 
@@ -83,11 +83,11 @@ const createArrayFromYArray = (yarray) =>
       },
       set: (object, property, value, receiver) =>
       {
-        if (Object.keys(object).includes(property))
+        if (Object.keys(object).includes(property as string))
         {
           object[property] = value;
 
-          const index = parseInt(property, 10);
+          const index = parseInt(property as string, 10);
 
           const left = yarray.slice(0, index);
           const right = yarray.slice(index+1);
@@ -112,7 +112,10 @@ const createArrayFromYArray = (yarray) =>
   )
 };
 
-const createObjectProxyForMap = (map, object = {}) =>
+const createObjectProxyForMap = <T = {}>(
+  map: Y.Map<any>,
+  object: T = ({} as T)
+): T =>
 {
   Object.entries(object).forEach(([ property, value ]) =>
   {
@@ -136,60 +139,75 @@ const createObjectProxyForMap = (map, object = {}) =>
         {
           case 'add':
           case 'update':
-            object[key] = map.get(key);
+            (object as any)[key] = map.get(key);
             break;
 
           case 'delete':
-            delete object[key];
+            delete (object as any)[key];
             break;
         }
       });
     }
   });
 
-  return new Proxy(
-    object,
-    {
-      get: (_, property) =>
+  return <T><unknown>(
+    new Proxy(
+      (<unknown>object) as object,
       {
-        const value = map.get(property)
+        get: (_, property) =>
+        {
+          const value = map.get(property as string)
 
-        if (value instanceof Y.Array)
-          return createArrayFromYArray(value);
+          if (value instanceof Y.Array)
+            return createArrayFromYArray(value);
 
-        else if (value instanceof Y.Map)
-          return createObjectFromYMap(value);
+          else if (value instanceof Y.Map)
+            return createObjectFromYMap(value);
 
-        else
-          return value;
-      },
-      set: (object, property, value) =>
-      {
-        object[property] = value;
+          else
+            return value;
+        },
+        set: (object: any, property, value) =>
+        {
+          object[property] = value;
 
-        if (value instanceof Array)
-          map.set(property, createYArrayFromArray(value));
+          if (value instanceof Array)
+            map.set(property as string, createYArrayFromArray(value));
 
-        else if (value instanceof Object)
-          map.set(property, createYMapFromObject(value));
+          else if (value instanceof Object)
+            map.set(property as string, createYMapFromObject(value));
 
-        else
-          map.set(property, value);
+          else
+            map.set(property as string, value);
 
-        return true;
-      },
-    }
+          return true;
+        },
+      }
+    )
   );
 };
 
-const yjson = (doc, name = uuid()) =>
+interface IYjson
 {
-  const store = createObjectProxyForMap(doc.getMap(name));
-  return store;
-};
+  observe(callback: (event: Y.YEvent, transaction: Y.Transaction) => void): void;
+}
 
-module.exports =
-{
-  yjson,
-  default: yjson,
-};
+export type Yjson<T> = IYjson & T;
+
+export const yjson =
+  <T = { [index: string]: any }>(
+    doc: Y.Doc,
+    name: string = uuid()
+  ): Yjson<T> =>
+  {
+    const map = doc.getMap(name);
+
+    const store = createObjectProxyForMap<T>(map);
+
+    return {
+      ...store,
+      observe: (callback) => map.observe(callback)
+    };
+  };
+
+export default yjson;
